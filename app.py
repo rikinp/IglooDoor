@@ -1,18 +1,103 @@
-from flask import Flask,request, jsonify
+from random import randrange
+from flask import Flask, request, jsonify
 import json
 app = Flask(__name__)
 
-@app.route('/unsafepasswords/<string:keyword>', methods=['GET'])
-def index(keyword):
+@app.route('/unsafepasswords', methods=['POST'])
+def index():
 
-    easyGuessKeywords = ["12345678","123456789","abcdefgh","qwerty","password","asdfghjk"]
-    easyGuessKeywords.append(keyword + "@123")
-    easyGuessKeywords.append(keyword + "@99")
-    easyGuessKeywords.append("123@" + keyword)
-    easyGuessKeywords.append("99@" + keyword)
+    keyword = request.json
+    easyGuessKeywords = ["12345678", "123456789",
+                         "abcdefgh", "qwerty", "password", "asdfghjk"]
+
+    easyGuessKeywords.append(keyword['firstname'] + "@123")
+    easyGuessKeywords.append(keyword['lastname'] + "@99")
+    easyGuessKeywords.append("123@" + keyword['school'])
+    easyGuessKeywords.append("99@" + keyword['city'])
+    easyGuessKeywords.append(keyword['firstname'] + "@" + keyword['city'])
+    easyGuessKeywords.append(keyword['firstname'] + "@" + keyword['lastname'])
+    easyGuessKeywords.append(keyword['city'] + "@" + keyword['school'])
+    easyGuessKeywords.append(keyword['firstname'] + "@" + keyword['school'])
+    easyGuessKeywords.append(keyword['firstname'] + "#" + keyword['city'])
+    easyGuessKeywords.append(keyword['firstname'] + "#123")
+    easyGuessKeywords.append(keyword['lastname'] + "#99")
+    easyGuessKeywords.append("123#" + keyword['school'])
+    easyGuessKeywords.append("99#" + keyword['city'])
+    easyGuessKeywords.append(keyword['firstname'] + "#" + keyword['city'])
+    easyGuessKeywords.append(keyword['firstname'] + "#" + keyword['lastname'])
+    easyGuessKeywords.append(keyword['city'] + "#" + keyword['school'])
+    easyGuessKeywords.append(keyword['firstname'] + "#" + keyword['school'])
+    easyGuessKeywords.append(keyword['firstname'] + "!123")
+    easyGuessKeywords.append(keyword['lastname'] + "!99")
+    easyGuessKeywords.append("123!" + keyword['school'])
+    easyGuessKeywords.append("99!" + keyword['city'])
+    easyGuessKeywords.append(keyword['firstname'] + "!" + keyword['city'])
+    easyGuessKeywords.append(keyword['firstname'] + "!" + keyword['lastname'])
+    easyGuessKeywords.append(keyword['city'] + "!" + keyword['school'])
+    easyGuessKeywords.append(keyword['firstname'] + "!" + keyword['school'])
+    easyGuessKeywords.append(keyword['firstname'] + "%123")
+    easyGuessKeywords.append(keyword['lastname'] + "%99")
+    easyGuessKeywords.append("123%" + keyword['school'])
+    easyGuessKeywords.append("99%" + keyword['city'])
+    easyGuessKeywords.append(keyword['firstname'] + "%" + keyword['city'])
+    easyGuessKeywords.append(keyword['firstname'] + "%" + keyword['lastname'])
+    easyGuessKeywords.append(keyword['city'] + "%" + keyword['school'])
+    easyGuessKeywords.append(keyword['firstname'] + "%" + keyword['school'])
+    easyGuessKeywords.append(keyword['firstname'] + "*123")
+    easyGuessKeywords.append(keyword['lastname'] + "*99")
+    easyGuessKeywords.append("123*" + keyword['school'])
+    easyGuessKeywords.append("99*" + keyword['city'])
+    easyGuessKeywords.append(keyword['firstname'] + "*" + keyword['city'])
+    easyGuessKeywords.append(keyword['firstname'] + "*" + keyword['lastname'])
+    easyGuessKeywords.append(keyword['city'] + "*" + keyword['school'])
+    easyGuessKeywords.append(keyword['firstname'] + "*" + keyword['school'])
+    easyGuessKeywords.append(keyword['firstname'] + "$123")
+    easyGuessKeywords.append(keyword['lastname'] + "$99")
+    easyGuessKeywords.append("123$" + keyword['school'])
+    easyGuessKeywords.append("99$" + keyword['city'])
+    easyGuessKeywords.append(keyword['firstname'] + "$" + keyword['city'])
+    easyGuessKeywords.append(keyword['firstname'] + "$" + keyword['lastname'])
+    easyGuessKeywords.append(keyword['city'] + "$" + keyword['school'])
+    easyGuessKeywords.append(keyword['firstname'] + "$" + keyword['school'])
 
     return jsonify(easyGuessKeywords)
 
+
+@app.route('/getsecurepassword', methods=['GET'])
+def getsecurepassword():
+
+    placenouns = ["wood", "forest", "copse", "bush", "trees", "stand swamp", "marsh", "wetland", "fen", "bog", "moor", "heath", "fells", "morass jungle", "rainforest", "cloud forest plains", "fields", "grass", "grassland", "savannah", "flood plain", "flats", "prairie tundra", "iceberg", "glacier", "snowfields hills", "highland", "heights", "plateau", "badland", "kame", "shield", "downs", "downland", "ridge", "ridgeline hollow", "valley", "vale", "glen", "dell mountain", "peak", "summit", "rise", "pass", "notch", "crown", "mount", "switchback", "furth canyon", "cliff", "bluff", "ravine", "gully", "gulch", "gorge desert", "scrub", "waste", "wasteland", "sands", "dunes volcano", "crater", "cone", "geyser", "lava fields By Water ocean", "sea", "coast", "beach", "shore", "strand bay", "port", "harbour", "fjord", "vike", "cove", "shoals", "lagoon", "firth", "bight", "sound", "strait", "gulf", "inlet", "loch", "bayou dock", "pier", "anchorage", "jetty", "wharf", "marina", "landing", "mooring", "berth", "quay", "staith river", "stream", "creek", "brook", "waterway", "rill delta", "bank", "runoff", "channel", "bend", "meander", "backwater lake", "pool", "pond", "dugout", "fountain", "spring", "watering-hole", "oasis well", "cistern", "reservoir waterfall", "falls", "rapids", "cataract", "cascade bridge", "crossing", "causeway", "viaduct", "aquaduct", "ford", "ferry dam", "dike", "bar", "canal", "ditch peninsula", "isthmus", "island", "isle", "sandbar", "reef", "atoll", "archipelago", "cay shipwreck", "derelict Outdoor Places clearing", "meadow", "grove", "glade", "fairy ring ruin", "acropolis", "desolation", "remnant", "remains henge", "cairn", "circle", "mound", "barrow", "earthworks", "petroglyphs lookout", "aerie", "promontory", "outcropping", "ledge", "overhang", "mesa", "butte outland", "outback", "territory", "reaches", "wild", "wilderness", "expanse view", "vista", "tableau", "spectacle", "landscape", "seascape", "aurora", "landmark battlefield", "trenches", "gambit", "folly", "conquest", "claim", "muster", "post path", "road", "track", "route", "highway", "way", "trail", "lane", "thoroughfare", "pike alley", "street", "avenue", "boulevard", "promenade", "esplande", "boardwalk crossroad", "junction", "intersection", "turn", "corner", "plaza", "terrace", "square", "courtyard", "court", "park", "marketplace", "bazaar", "fairground realm", "land", "country", "nation", "state", "protectorate", "empire", "kingdom", "principality domain", "dominion", "demesne", "province", "county", "duchy", "barony", "baronetcy", "march", "canton", "earldom", "fief", "shire Under the Ground pit", "hole", "abyss", "sinkhole", "crack", "chasm", "scar", "rift", "trench", "fissure cavern", "cave", "gallery", "grotto", "karst mine", "quarry", "shaft", "vein darkness", "shadow", "depths", "void tomb", "grave", "crypt", "sepulchre", "mausoleum", "ossuary", "boneyard", "graveyard", "cemetery maze", "labyrinth Living Places nest", "burrow", "lair", "den", "bolt-hole", "warren", "roost", "rookery", "hibernaculum home", "rest", "hideout", "hideaway", "retreat", "resting-place", "safehouse", "sanctuary", "respite", "lodge slum", "shantytown", "ghetto camp", "meeting place", "bivouac", "campsite", "encampment tepee", "tent", "wigwam", "shelter", "lean-to", "yurt house", "mansion", "estate", "villa", "hut", "palace", "outbuilding", "shack tenement", "hovel", "manse", "manor", "longhouse", "cottage", "cabin parsonage", "rectory", "vicarge", "friary", "priory abbey", "monastery", "nunnery", "cloister", "convent", "hermitage castle", "keep", "fort", "fortress", "citadel", "bailey", "motte", "stronghold", "hold", "chateau", "outpost", "redoubt town", "village", "hamlet", "city", "metropolis settlement", "commune Buildings and Facilities temple", "shrine", "church", "cathedral", "tabernacle", "ark", "sanctum", "parish", "chapel", "synagogue", "mosque pyramid", "ziggurat prison", "jail", "dungeon", "oubliette", "hospital", "hospice", "stocks", "gallows asylum", "madhouse", "bedlam vault", "treasury", "warehouse", "cellar", "relicry", "repository barracks", "armoury sewer", "gutter", "catacombs", "dump", "middens", "pipes", "baths", "heap mill", "windmill", "sawmill", "smithy", "forge", "workshop", "brickyard", "shipyard", "forgeworks", "foundry bakery", "brewery", "almshouse", "counting house", "courthouse", "apothecary", "haberdashery", "cobbler garden", "menagerie", "zoo", "aquarium", "terrarium", "conservatory", "lawn", "greenhouse farm", "orchard", "vineyard", "ranch", "apiary", "farmstead", "homestead pasture", "commons", "granary", "silo", "crop barn", "stable", "pen", "kennel", "mews", "hutch", "pound", "coop", "stockade", "yard", "lumber yard tavern", "inn", "pub", "brothel", "whorehouse", "cathouse", "discotheque lighthouse", "beacon amphitheatre", "colosseum", "stadium", "arena", "circus academy", "university", "campus", "college", "library", "scriptorium", "laboratory", "observatory", "museum Architectural Features hall", "chamber", "room nave", "aisle", "vestibule", "antechamber", "chantry", "pulpit dome", "arch", "colonnade stair", "ladder", "climb", "ramp", "steps portal", "mouth", "opening", "door", "gate", "entrance", "maw tunnel", "passage", "corridor", "hallway", "chute", "slide", "tube", "trapdoor tower", "turret", "belfry wall", "fortifications", "ramparts", "pallisade", "battlements", "portcullis", "barbican throne room", "ballroom roof", "rooftops", "chimney", "attic", "loft", "gable", "eaves", "belvedere balcony", "balustrade", "parapet", "walkway", "catwalk pavillion", "pagoda", "gazebo mirror", "glass", "mere throne", "seat", "dais pillar", "column", "stone", "spike", "rock", "megalith", "menhir", "dolmen", "obelisk statue", "giant", "head", "arm", "leg", "body", "chest", "body", "face", "visage", "gargoyle", "grotesque fire", "flame", "bonfire", "hearth", "fireplace", "furnace", "stove window", "grate", "peephole", "arrowslit", "slit", "balistraria", "lancet", "aperture", "dormer"]
+
+    actornouns = ["Aardvark","Aardwolf","Abyssinian","Addax","Adelie","Penguin","Aesculapian","snake","Affenpinscher","Afghan","Hound","African","Bullfrog","African","Bush","Elephant","African","Civet","African","Clawed","Frog","African","Forest","Elephant","African","Grey","Parrot","African","Palm","Civet","African","Penguin","African","Tree","Toad","African","Wild","Dog","Agama","Lizard","Aidi","Ainu","Airedale","Terrier","Airedoodle","Akbash","Akita","Akita","Shepherd","Alabai","Alaskan","Husky","Alaskan","Klee","Kai","Alaskan","Malamute","Alaskan","Shepherd","Albacore","Tuna","Albatross","Aldabra","Giant","Tortoise","Alligator","Alligator","Gar","Alpaca","Alpine","Dachsbracke","Alpine","Goat","Alusky","Amazon","Parrot","Amazon","River","Dolphin","(Pink","Dolphin)","Ambrosia","Beetle","American","Alsatian","American","Bulldog","American","Cocker","Spaniel","American","Cockroach","American","Coonhound","American","Dog","Tick","American","Eskimo","Dog","American","Foxhound","American","Hairless","Terrier","American","Leopard","Hound","American","Pit","Bull","Terrier","American","Pygmy","Goat","American","Robin","American","Staffordshire","Terrier","American","Toad","American","Water","Spaniel","Amur","Leopard","Anaconda","Anatolian","Shepherd","Dog","Anchovies","Angelfish","Anglerfish","Angora","Ferret","Angora","Goat","Anole","Lizard","Ant","Antarctic","scale","worm","Anteater","Antelope","Ape","Appenzeller","Dog","Apple","Head","Chihuahua","Arafura","File","Snake","Arapaima","Arctic","Fox","Arctic","Hare","Arctic","Wolf","Arizona","Bark","Scorpion","Arizona","Black","Rattlesnake","Armadillo","Armadillo","Lizard","Armyworm","Asian","Cockroach","Asian","Elephant","Asian","Giant","Hornet","Asian","Palm","Civet","Asiatic","Black","Bear","Asp","Assassin","Bug","Aurochs","Aussiedoodle","Aussiedor","Australian","Bulldog","Australian","Cattle","Dog","Australian","Cockroach","Australian","Gecko","Australian","Kelpie","Dog","Australian","Labradoodle","Australian","Mist","Australian","Retriever","Australian","Shepherd","Australian","Terrier","Avocet","Axolotl","Aye","Aye","Babirusa","Baboon","Bactrian","Camel","Badger","Baiji","Bald","Eagle","Baleen","Whale","Balinese","Balkan","Lynx","Ball","Python","Banana","Ball","Python","Banana","Spider","Banded","Palm","Civet","Banded","Water","Snake","Bandicoot","Banjo","Catfish","Barb","Barbet","Barn","Owl","Barn","Swallow","Barnacle","Barracuda","Barramundi","Fish","Barred","Owl","Basenji","Dog","Basilisk","Lizard","Basking","Shark","Bassador","Basset","Fauve","de","Bretagne","Basset","Hound","Bassetoodle","Bat","Bavarian","Mountain","Hound","Baya","Bea-Tzu","Beabull","Beagador","Beagle","Beagle","Shepherd","Beaglier","Beago","Bear","Bearded","Collie","Bearded","Dragon","Bearded","Vulture","Beaski","Beauceron","Beaver","Bed","Bugs","Bedlington","Terrier","Bee","Beefalo","Beetle","Belgian","Shepherd","Belgian","Tervuren","Beluga","Sturgeon","Bengal","Tiger","Bergamasco","Berger","Picard","Bernedoodle","Bernese","Mountain","Dog","Bernese","Shepherd","Betta","Fish","(Siamese","Fighting","Fish)","Bichir","Bichon","Frise","Bichpoo","Biewer","Terrier","Bighorn","Sheep","Bilby","Binturong","Bird","Bird","Of","Paradise","Birman","Biscuit","Beetle","Bison","Black","And","Tan","Coonhound","Black","Mamba","Black","Marlin","Black","Rhinoceros","Black","Russian","Terrier","Black","Wasp","Black","Widow","Spider","Black-Footed","Ferret","Blackpoll","Warbler","Blanket","Octopus","Blister","Beetle","Blobfish","Blood","Python","Bloodhound","Blue","Belly","Lizard","Blue","grosbeak","Blue","Iguana","Blue","Jay","Blue","Lacy","Dog","Blue","Picardy","Spaniel","Blue","Shark","Blue","Tit","Blue","Whale","Blue-Ringed","Octopus","Bluefin","Tuna","Bluetick","Coonhound","Bobcat","Bobolink","Boggle","Boglen","Terrier","Boiga","Bolognese","Dog","Bombay","Bongo","Bonito","Fish","Bonnethead","Shark","Bonobo","Booby","Boomslang","Borador","Border","Collie","Border","Terrier","Bordoodle","Borkie","Bornean","Orang-utan","Borneo","Elephant","Boston","Terrier","Bottlenose","Dolphin","Bouvier","Des","Flandres","Bowfin","Bowhead","Whale","Box","Turtle","Boxador","Boxer","Dog","Boxerdoodle","Boxfish","Boxsky","Boxweiler","Boykin","Spaniel","Brazilian","Terrier","British","Timber","Brittany","Brookesia","Micra","Brown","Bear","Brown","Dog","Tick","Brown","Hyena","Brown","Snake","Brown","Water","Snake","Brown-banded","Cockroach","Brug","Brussels","Griffon","Budgerigar","Buffalo","Bull","Shark","Bull","Terrier","Bulldog","Bullfrog","Bullmastiff","Bumblebee","Burmese","Burmese","Python","Burrowing","Frog","Burrowing","Owl","Bush","Baby","Bush","Viper","Bushmaster","Snake","Butterfly","Butterfly","Fish","Cactus","Mouse","Caecilian","Caiman","Caiman","Lizard","Cairn","Terrier","Camel","Camel","Cricket","Camel","Spider","Canaan","Dog","Canada","Lynx","Canadian","Eskimo","Dog","Canadian","Horse","Cane","Corso","Cantil","Cape","Lion","Capybara","Caracal","Caribou","Carolina","Dog","Carolina","Parakeet","Carp","Carpenter","Ant","Carpet","Python","Carpet","Viper","Cascabel","Cashmere","Goat","Cassowary","Cat","Catahoula","Leopard","Catalan","Sheepdog","Caterpillar","Catfish","Cava","Tzu","Cavador","Cavalier","King","Charles","Spaniel","Cavapoo","Centipede","Cesky","Fousek","Cesky","Terrier","Chameleon","Chamois","Chartreux","Cheagle","Cheetah","Chesapeake","Bay","Retriever","Chickadee","Chicken","Chicken","Snake","Chihuahua","Chimaera","Chimpanzee","Chinchilla","Chinese","Alligator","Chinese","Crested","Dog","Chinese","Geese","Chinese","Paddlefish","Chinese","Shar-Pei","Chinook","Chinstrap","Penguin","Chipmunk","Chipoo","Chiweenie","Chorkie","Chow","Chow","Chow","Shepherd","Christmas","Island","Red","Crab","Cicada","Cichlid","Cinereous","Vulture","Cinnamon","Ferret","Clouded","Leopard","Clownfish","Clumber","Spaniel","Coachwhip","Snake","Coati","Cockalier","Cockapoo","Cockatiel","Cockatoo","Cocker","Spaniel","Cockroach","Codfish","Coelacanth","Collared","Peccary","Collett’s","Snake","Collie","Colossal","Squid","Common","Buzzard","Common","European","Adder","Common","Frog","Common","Furniture","Beetle","Common","House","Spider","Common","Loon","Common","Raven","Common","Toad","Congo","Snake","Cookiecutter","Shark","Cooper’s","Hawk","Copperhead","Coral","Coral","Snake","Corgidor","Corgipoo","Corkie","Corman","Shepherd","Corn","Rex","Cat","(Cornish","Rex)","Corn","Snake","Coton","de","Tulear","Cotton-top","Tamarin","Cottonmouth","Cougar","Cow","Coyote","Crab","Crab","Spider","Crab-Eating","Macaque","Crabeater","Seal","Crane","Crappie","Fish","Crested","Gecko","Crested","Penguin","Cricket","Crocodile","Cross","Fox","Cross","River","Gorilla","Crow","Crucian","Carp","Cuban","Cockroach","Cuckoo","Curly","Coated","Retriever","Cuscus","Cuttlefish","Czechoslovakian","Wolfdog","Dachsador","Dachshund","Dalmadoodle","Dalmador","Dalmatian","Danios","Dapple","Dachshund","Darwin’s","fox","Darwin’s","Frog","Death","Adder","Death’s","Head","Cockroach","Deathwatch","Beetle","Deer","Deer","Head","Chihuahua","Deer","Tick","Desert","Locust","Desert","Rain","Frog","Desert","Tortoise","Deutsche","Bracke","Devils","Coach","Horse","Beetle","Devon","Rex","Dhole","Dik-Dik","Dingo","Discus","Doberman","Pinscher","Dodo","Dog","Dog","Tick","Dogo","Argentino","Dogue","De","Bordeaux","Dolphin","Donkey","Dorgi","Dorkie","Dormouse","Double","Doodle","Douc","Doxiepoo","Doxle","Draco","Volans","Lizard","Dragonfish","Dragonfly","Drever","Drum","Fish","Dubia","Cockroach","Duck","Dugong","Dung","Beetle","Dunker","Dunnock","Dusky","Dolphin","Dwarf","Crocodile","Dwarf","Hamster","Eagle","Earthworm","Earwig","Eastern","Barred","Bandicoot","Eastern","Bluebird","Eastern","Brown","Snake","Eastern","Chipmunk","Eastern","Diamondback","Rattlesnake","Eastern","Fence","Lizard","Eastern","Glass","Lizard","Eastern","Gorilla","Eastern","Gray","Squirrel","Eastern","Indigo","Snake","Eastern","Lowland","Gorilla","Eastern","Phoebe","Eastern","Rat","snake","Eastern","Woodrat","Echidna","Eclectus","Parrot","Edible","Frog","Eel","Egyptian","Cobra","Egyptian","Goose","Egyptian","Mau","Eland","Electric","Eel","Elegant","Tern","Elephant","Elephant","Seal","Elephant","Shrew","Elk","Emerald","Tree","Monitor","Emperor","Penguin","Emperor","Tamarin","Emu","English","Bulldog","English","Cocker","Spaniel","English","Cream","Golden","Retriever","English","Foxhound","English","Pointer","English","Setter","English","Shepherd","English","Springer","Spaniel","Entlebucher","Mountain","Dog","Epagneul","Pont","Audemer","Ermine","Escolar","Eskimo","Dog","Eskipoo","Estrela","Mountain","Dog","Eurasian","Beaver","Eurasian","Jay","Eurasian","Lynx","Eurasian","Nuthatch","Eurasian","Wolf","European","Bee-Eater","European","Polecat","European","Robin","European","Wildcat","Evening","Bat","Falcon","Fallow","deer","False","Killer","Whale","False","Widow","Spider","Fangtooth","Feist","Fennec","Fox","Fer-de-lance","Snake","Ferret","Ferruginous","Hawk","Fiddler","Crab","Field","Spaniel","Fierce","Snake","Fila","Brasileiro","Fin","Whale","Finnish","Spitz","Fire","salamander","Fire-Bellied","Toad","Firefly","Fish","Fisher","Cat","Fishing","Cat","Flamingo","Flat-Coated","Retriever","Flea","Florida","Gar","Florida","Panther","Florida","Woods","Cockroach","Flounder","Flowerhorn","Fish","Fluke","Fish","(summer","flounder)","Fly","Flying","Fish","Flying","Lemur","Flying","Squirrel","Formosan","Mountain","Dog","Fossa","Fox","Fox","Snakes","Fox","Squirrel","Fox","Terrier","French","Bulldog","Frenchton","Frengle","Freshwater","Crocodile","Freshwater","Eel","Freshwater","Jellyfish","Frigatebird","Frilled","Lizard","Frilled","Shark","Frog","Frogfish","Fruit","Bat","Fruit","Fly","Fur","Seal","Gaboon","Viper","Galapagos","Penguin","Galapagos","Tortoise","Gar","Garden","Eel","Garter","Snake","Gazelle","Gecko","Genet","Gentoo","Penguin","Geoffroys","Tamarin","Gerberian","Shepsky","Gerbil","German","Cockroach","German","Pinscher","German","Shepherd","Guide","German","Sheppit","German","Sheprador","German","Shorthaired"]
+
+    specialsymbolsList = ["!" ,"#" ,"$" ,"%" ,"&" ,"'" ,"(" ,")" ,"*" ,"+" ,"-" ,"." ,"/" ,":" ,";" ,"<" ,"=" ,">" ,"?" ,"@" ,"[" ,"^" ,"_","|" ,"~"]
+    
+    randomNumberActor = randrange(len(actornouns))
+    randomActor = actornouns[randomNumberActor]
+    
+    randomKms = randrange(200)
+    
+    randomPlaceNo1 = randrange(len(placenouns))
+    randomPlaceNo2 = randrange(len(placenouns))
+    
+    randomPlace1 = placenouns[randomPlaceNo1]
+    randomPlace2 = placenouns[randomPlaceNo2]
+    
+    generatedStory = randomActor + " crosses " + randomPlace1 + " by traveling " + str(randomKms) + " miles" + " and reaches " + randomPlace2
+
+    randomSpecialSymbolNo = randrange(len(specialsymbolsList))
+    randomSpecialSymbol = specialsymbolsList[randomSpecialSymbolNo]
+    
+    generatedPassword = randomActor[:3] + randomPlace1[:3] + str(randomKms) + str(randomSpecialSymbol) + randomPlace2[:3]
+    
+    Output = {
+        "generatedpassword" : generatedPassword,
+        "rememberAs" : generatedStory
+    }
+
+    return Output
+
+
 if __name__ == '__main__':
-    app.run(port=80, debug=True)
+    app.run(port=5000, debug=True)
 
