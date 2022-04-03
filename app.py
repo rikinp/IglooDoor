@@ -88,7 +88,7 @@ def getsecurepassword():
     randomSpecialSymbolNo = randrange(len(specialsymbolsList))
     randomSpecialSymbol = specialsymbolsList[randomSpecialSymbolNo]
     
-    generatedPassword = randomActor[:3] + randomPlace1[:3] + str(randomKms) + str(randomSpecialSymbol) + randomPlace2[:3]
+    generatedPassword = randomActor[:3].toUpper() + randomSpecialSymbolrandomPlace1[:3] + str(randomKms) + str(randomSpecialSymbol) + randomPlace2[:3]
     
     Output = {
         "generatedpassword" : generatedPassword,
@@ -97,7 +97,5 @@ def getsecurepassword():
 
     return Output
 
-
 if __name__ == '__main__':
-    app.run()
-
+    app.run(port=5000,debug=True)
